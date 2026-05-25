@@ -1,0 +1,200 @@
+/* Base Header Styles */
+.glass-header {
+  display: block; 
+  height: 72px; /* Increased from 64px */
+  padding: 0 16px;
+  background: rgba(15, 23, 42, 0.75); /* More opaque */
+  backdrop-filter: blur(24px); /* Increased blur */
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.header-inner-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1280px; /* MATCH Management.css max-width */
+    margin: 0 auto;
+    height: 100%;
+    padding: 0 24px; /* MATCH Management.css padding */
+}
+
+.header-left, .header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 0 0 auto; /* Don't shrink */
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0; /* Enable truncation for children */
+  margin: 0 1rem;
+}
+
+/* Logo Area */
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 6px 10px;
+  margin-left: -10px; /* PULL LEFT to align icon perfectly with content text */
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+.logo-area:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--primary-gradient); /* Use brand gradient */
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+  box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
+}
+
+.logo-text {
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+  color: white;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Header Title (Legacy) */
+.header-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+/* Role Pill (New Standard) */
+.role-pill {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s ease;
+}
+
+.role-pill:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Actions */
+.back-btn, .theme-toggle, .logout-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8; /* Slate 400 */
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Actions Container */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* Space between Toggle and Logout */
+}
+
+/* Premium Rotation for Theme Toggle */
+.theme-toggle {
+    order: 1; /* Force Left Position */
+    margin: 0;
+}
+.theme-toggle svg {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.theme-toggle:hover svg {
+    transform: rotate(180deg);
+    color: #ffd700; /* Gold shine on hover */
+}
+.theme-toggle:active svg {
+    transform: rotate(360deg);
+}
+
+.logout-btn {
+  order: 2; /* Force Right Position */
+  padding: 6px 20px; /* Wider button */
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0; /* Let gap handle spacing */
+}
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); /* Red Glow */
+}
+
+/* Light Mode Overrides */
+.light-mode.glass-header {
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.light-mode .logo-text { color: #1e293b; }
+.light-mode .header-title { color: #475569; }
+.light-mode .back-btn, .light-mode .theme-toggle { color: #64748b; }
+.light-mode .logout-btn {
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #475569;
+}
+.light-mode .logout-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #0f172a;
+}
+.light-mode .role-pill {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.7);
+}
+.light-mode .role-pill:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: #000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .logo-text { display: none; }
+  .header-left, .header-right { gap: 8px; }
+  .logout-btn { padding: 6px 12px; font-size: 0.8rem; }
+  .header-center { margin: 0 0.5rem; }
+  .role-pill { font-size: 0.7rem; padding: 4px 12px; }
+}
