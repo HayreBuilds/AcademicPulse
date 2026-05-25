@@ -59,7 +59,8 @@ export default function Signup({ onNavigate }) {
     try {
         const resultAction = await dispatch(registerUser({ ...formData, file: photo }));
         if (registerUser.fulfilled.match(resultAction)) {
-            onNavigate('verify'); 
+            // PORTFOLIO BYPASS: Go straight to dashboard instead of verify screen
+            window.location.href = '/dashboard'; 
         } else {
             console.error(resultAction.payload);
             setIsSubmitting(false); // Reset on failure

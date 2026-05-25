@@ -35,7 +35,7 @@ export const authService = {
         if (photoURL) profileUpdates.photoURL = photoURL;
         
         await updateProfile(user, profileUpdates);
-        await sendEmailVerification(user);
+        // await sendEmailVerification(user); // PORTFOLIO BYPASS
 
         const tempPayload = {
           uid: user.uid,
@@ -50,10 +50,10 @@ export const authService = {
           staffCode: null,
           profilePictureUrl: photoURL || user.photoURL || '',
           bio: '',
-          isRegistered: false,
-          isVerified: false,
+          isRegistered: true, // PORTFOLIO BYPASS: Mark as registered immediately
+          isVerified: true,   // PORTFOLIO BYPASS: Mark as verified immediately
           status: 'active', // active | suspended | banned
-          lastLoginAt: null,
+          lastLoginAt: serverTimestamp(), // PORTFOLIO BYPASS: Set login time now
           createdAt: serverTimestamp(),
           stats: {
               ratingsGiven: 0,
@@ -62,8 +62,20 @@ export const authService = {
           }
         };
         
-        // Write to TEMPORARY 'pending_registrations' collection
-        await setDoc(doc(db, 'pending_registrations', user.uid), tempPayload);
+        // Write to main 'users' collection immediately (PORTFOLIO BYPASS)
+        await setDoc(doc(db, 'users', user.uid), tempPayload);
+
+        // Also create role-specific docs immediately
+        if (role === 'student') {
+            await setDoc(doc(db, 'students', user.uid), {
+                studentId: user.uid,
+                year: '1',
+                campusId: 'main',
+                departmentId: department,
+                stats: { reviewsCount: 0, helpfulVotes: 0 },
+                createdAt: serverTimestamp()
+            });
+        }
     } catch (error) {
         console.error("Registration data setup failed:", error);
         // CRITICAL: Throw so the UI knows

@@ -24,13 +24,8 @@ export default function AuthEntry() {
        // EMERGENCY BYPASS: Allow specific UID to enter to run migration
        const ALLOWED_UIDS = ['dH2UzGIvfigE7CgUUYtETtpnwsJ2', 'eLowMYFctOSpM8748S1rHXfx6NV2'];
        
-       // 1. If verified, never show verify screen. Trust auto-repair or profile creation.
-       // 2. If 'isRegistered' is true, obviously proceed.
-       // 3. If explicit allowed UID, proceed.
-       
-       // 3. If explicit allowed UID, proceed.
-       
-       if (user.emailVerified || user.isRegistered || ALLOWED_UIDS.includes(user.uid)) {
+       // PORTFOLIO BYPASS: Allow all users to bypass verification
+       if (true || user.emailVerified || user.isRegistered || ALLOWED_UIDS.includes(user.uid)) {
            // Already verified or registered, redirect to dashboard
            // Already verified or registered, redirect to dashboard
            setTimeout(() => {
