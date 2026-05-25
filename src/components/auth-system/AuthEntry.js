@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { auth } from '../../firebase';
 import AuthLayout from './AuthLayout';
 import Login from './Login';
 import Signup from './Signup';
@@ -15,7 +14,6 @@ export default function AuthEntry() {
   const [showSplash, setShowSplash] = useState(true);
   const { user, authStatus } = useSelector((state) => state.auth);
   const initialized = authStatus === 'hydrated' || authStatus === 'unauthenticated';
-  const loading = authStatus === 'checking' || authStatus === 'idle';
   const navigate = useNavigate();
 
   // Check auth state on mount (Synced with Redux)

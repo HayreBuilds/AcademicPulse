@@ -3,13 +3,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import PremiumModal from '../common/PremiumModal';
-import { generateExecutiveReport, generateDepartmentReport, generatePremiumIntelligenceReport, generateAIAnalysis } from '../../utils/AppReportGenerator';
+import { generatePremiumIntelligenceReport, generateAIAnalysis } from '../../utils/AppReportGenerator';
 import { adminService } from '../../services/adminService';
 
 export default function AdminDashboard({ stats, ratings, users }) {
   const [scanning, setScanning] = React.useState(false);
   const [modal, setModal] = React.useState({ isOpen: false, title: '', message: '', type: 'alert' });
-  const navigate = useNavigate();
 
   // Helper for Modals
   const showModal = (title, message, type = 'alert', onConfirm = null) => {
@@ -201,17 +200,6 @@ export default function AdminDashboard({ stats, ratings, users }) {
         }
     });
   };
-
-  // Mock Trend Data (Visual only)
-  const trendData = [
-      Math.max(0, (stats?.totalRatings || 0) - 5), 
-      Math.max(0, (stats?.totalRatings || 0) - 2), 
-      (stats?.totalRatings || 0), 
-      (stats?.totalRatings || 0) + 2, 
-      (stats?.totalRatings || 0) + 5
-  ];
-
-
 
   if (!stats) return <div style={{padding: 20}}>Loading stats...</div>;
 

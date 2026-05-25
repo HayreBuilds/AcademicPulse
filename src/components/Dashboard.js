@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../store/slices/authSlice';
+import { useSelector } from 'react-redux';
 import DashboardHome from './student-dashboard/DashboardHome';
 import RateCourses from './student-dashboard/RateCourses';
-import MyRatings from './student-dashboard/MyRatings'; // Kept as fallback/alias source
 import StudentProfile from './StudentProfile';
 import InstructorDashboard from './instructor/InstructorDashboard';
 import InstructorProfile from './instructor-profile/InstructorProfile';
@@ -15,7 +13,6 @@ import './student-dashboard/StudentDashboard.css';
 import Header from './common/Header';
 
 export default function Dashboard() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   

@@ -6,7 +6,6 @@ import { checkAuthState } from './store/slices/authSlice';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AdminRoute from './routes/AdminRoute';
 import ManagementRoute from './routes/ManagementRoute';
-import AuthGuard from './routes/AuthGuard'; // New explicit guard
 import GlobalLoader from './components/common/GlobalLoader';
 import ThemeProvider from './components/common/ThemeProvider';
 import ErrorBoundary from './components/common/ErrorBoundary';
@@ -17,7 +16,6 @@ const AuthEntry = lazy(() => import('./components/auth-system/AuthEntry'));
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const Settings = lazy(() => import('./pages/Settings'));
 const AdminPanelEntry = lazy(() => import('./components/admin-panel/AdminEntry'));
-const AdminLogin = lazy(() => import('./pages/AdminLogin'));
 const AdminImporter = lazy(() => import('./pages/AdminImporter'));
 // Fixed import duplication
 const InstructorDashboard = lazy(() => import('./components/instructor/InstructorDashboard'));
