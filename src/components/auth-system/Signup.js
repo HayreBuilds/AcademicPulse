@@ -53,11 +53,6 @@ export default function Signup({ onNavigate }) {
         return;
     }
     
-    if (!formData.email.endsWith('@aau.edu.et')) {
-        alert("Verification Error: Please use your official university email (@aau.edu.et) to sign up.");
-        return;
-    }
-    
     setIsSubmitting(true);
     dispatch(clearError());
     
