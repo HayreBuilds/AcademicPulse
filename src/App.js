@@ -46,6 +46,7 @@ const MfaPrompt = lazy(() => import('./components/auth/MfaPrompt'));
 const MfaEnroll = lazy(() => import('./components/auth/MfaEnroll'));
 const EmailOtpPrompt = lazy(() => import('./components/auth/EmailOtpPrompt'));
 const AdminSeeder = lazy(() => import('./components/dev/AdminSeeder'));
+const DatabaseSeeder = lazy(() => import('./components/dev/DatabaseSeeder'));
 
 export default function App() {
   const dispatch = useDispatch();
@@ -216,7 +217,8 @@ export default function App() {
               <Route path="/email-otp" element={<EmailOtpPrompt />} />
               
               {/* Temp Seeder */}
-              <Route path="/seed-admin" element={<AdminSeeder />} />
+              <Route path="/admin/seed" element={<AdminSeeder />} />
+              <Route path="/dev/seed" element={<DatabaseSeeder />} />
 
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />

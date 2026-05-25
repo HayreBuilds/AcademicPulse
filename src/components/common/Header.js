@@ -101,7 +101,7 @@ export default function Header({
                 title="Return to Dashboard"
                 onKeyDown={(e) => e.key === 'Enter' && handleLogoClick()}
             >
-                <div className="logo-icon">⚡</div>
+                <div className="logo-icon">🎓</div>
                 <span className="logo-text">AcademicPulse</span>
             </div>
             </div>

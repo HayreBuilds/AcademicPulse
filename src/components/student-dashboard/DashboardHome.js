@@ -96,10 +96,15 @@ export default function DashboardHome({ user, navigateTo }) {
           <h3>Reviews & Activity</h3>
           <p>Manage your reviews, feedback, and replies in one place.</p>
         </div>
+        <div className="nav-card glass-card" onClick={() => navigateTo('profile')}>
+          <div className="icon">👤</div>
+          <h3>My Profile</h3>
+          <p>View your stats and manage your identity.</p>
+        </div>
       </div>
 
       {/* Widgets */}
-      <div className="widgets-grid">
+      <div className="widgets-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '32px' }}>
         
         {/* Top Instructors Discovery */}
         <div className="widget-section">
