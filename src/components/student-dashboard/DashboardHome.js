@@ -1,144 +1,152 @@
 import React from 'react';
-import useDashboardData from './useDashboardData';
-import TopInstructors from '../student/TopInstructors';
-import PopularReviewers from '../student/PopularReviewers';
-import SkeletonLoader from '../common/SkeletonLoader';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import Header from '../common/Header';
 import PerformanceChart from '../common/PerformanceChart';
+import TopInstructors from '../student/TopInstructors';
+import TopReviewers from '../student/PopularReviewers';
+import GlobalLoader from '../common/GlobalLoader';
+import useDashboardData from './useDashboardData';
+import './StudentDashboard.css';
 
-export default function DashboardHome({ user, navigateTo }) {
-  const { stats, topInstructors, activeReviewers, recentActivity, aiInsight, engagementTrend, loading } = useDashboardData(user);
+export default function DashboardHome() {
+  const navigate = useNavigate();
+  const { user } = useSelector(state => state.auth);
+  const { 
+    stats, 
+    topInstructors, 
+    activeReviewers, 
+    aiInsight, 
+    engagementTrend,
+    loading 
+  } = useDashboardData(user);
 
-  if (loading) return (
-    <div className="dashboard-home">
-        <div className="welcome-hero skeleton-hero">
-            <SkeletonLoader width="100px" height="100px" borderRadius="50%" />
-            <div className="skeleton-content">
-                <SkeletonLoader width="60%" height="40px" style={{marginBottom: 10}} />
-                <SkeletonLoader width="40%" height="20px" style={{marginBottom: 20}} />
-                <div className="skeleton-stats">
-                    <SkeletonLoader width="80px" height="30px" borderRadius="20px" />
-                    <SkeletonLoader width="80px" height="30px" borderRadius="20px" />
-                    <SkeletonLoader width="80px" height="30px" borderRadius="20px" />
-                </div>
-            </div>
-        </div>
-        <div className="quick-nav skeleton-nav">
-            <SkeletonLoader height="150px" borderRadius="16px" />
-            <SkeletonLoader height="150px" borderRadius="16px" />
-            <SkeletonLoader height="150px" borderRadius="16px" />
-        </div>
-    </div>
-  );
+  const navigateTo = (path) => navigate(`/dashboard/${path}`);
+
+  if (loading || !user) return <GlobalLoader />;
 
   return (
     <div className="dashboard-home">
-      {/* Welcome Hero */}
+      {/* Welcome Hero - High Impact */}
       <div className="welcome-hero clickable" onClick={() => navigateTo('profile')}>
         <img 
-          src={user.profilePictureUrl || user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}&background=random`} 
+          src={user.profilePictureUrl || user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || 'User'}&background=random`} 
           alt="Profile" 
           className="student-avatar-large"
         />
         <div className="hero-content">
-          <h1>Welcome back, {user.displayName?.split(' ')[0] || 'Student'}!</h1>
-          <p className="hero-subtitle">Ready to shape the future of education at CNCS?</p>
+          <h1>Welcome back, {user.displayName?.split(' ')[0] || 'Scholar'}!</h1>
+          <p className="hero-subtitle">
+            Your academic journey is in full swing. You've influenced {stats.reviewsSubmitted || 0} peer decisions this semester.
+          </p>
           
           <div className="stats-row">
             <div className="stat-pill">
-              <span>{stats.coursesTaken}</span>
+              <span>{stats.coursesTaken || 0}</span>
               <span>Courses</span>
             </div>
             <div className="stat-pill">
-              <span>{stats.instructorsRated}</span>
+              <span>{stats.instructorsRated || 0}</span>
               <span>Rated</span>
             </div>
             <div className="stat-pill">
-              <span>{stats.engagementScore}</span>
-              <span>Score</span>
+              <span>{stats.engagementScore || 0}</span>
+              <span>IQ Score</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* AI Insight Section - Billion Dollar Polish */}
+      {/* AI Insight Section */}
       {aiInsight && (
-        <div className="ai-insight-card glass-card">
+        <div className="ai-insight-card">
+          <div className="ai-icon">{aiInsight.icon}</div>
+          <div className="ai-text">
+            <h4>{aiInsight.title}</h4>
+            <p>{aiInsight.text}</p>
+          </div>
           <div className="ai-badge">AI INSIGHT</div>
-          <div className="ai-content">
-            <div className="ai-icon">{aiInsight.icon}</div>
-            <div className="ai-text">
-              <h4>{aiInsight.title}</h4>
-              <p>{aiInsight.text}</p>
-            </div>
-          </div>
-          <div className="ai-visual">
-            <div className="pulse-ring"></div>
-          </div>
         </div>
       )}
 
-      {/* Engagement Analytics */}
-      <PerformanceChart 
-        data={engagementTrend} 
-        title="Academic Engagement Trend" 
-        subtitle="Your activity impact on the CNCS community"
-      />
+      {/* Analytics Section */}
+      <div className="analytics-section">
+        <PerformanceChart 
+          data={engagementTrend} 
+          title="Engagement Analytics" 
+          subtitle="Real-time tracking of your academic feedback impact"
+        />
+      </div>
 
       {/* Quick Navigation */}
       <div className="quick-nav">
-        <div className="nav-card glass-card" onClick={() => navigateTo('rate')}>
+        <div className="nav-card" onClick={() => navigateTo('rate')}>
           <div className="icon">⭐</div>
-          <h3>Rate Instructors</h3>
-          <p>Share your experience and help others.</p>
+          <h3>Rate Faculty</h3>
+          <p>Provide anonymous, AI-analyzed feedback for your instructors.</p>
         </div>
-        <div className="nav-card glass-card" onClick={() => navigateTo('activity')}>
+        <div className="nav-card" onClick={() => navigateTo('activity')}>
           <div className="icon">📝</div>
-          <h3>Reviews & Activity</h3>
-          <p>Manage your reviews, feedback, and replies in one place.</p>
+          <h3>Activity Feed</h3>
+          <p>Track your reviews, helpful votes, and instructor replies.</p>
         </div>
-        <div className="nav-card glass-card" onClick={() => navigateTo('profile')}>
+        <div className="nav-card" onClick={() => navigateTo('profile')}>
           <div className="icon">👤</div>
-          <h3>My Profile</h3>
-          <p>View your stats and manage your identity.</p>
+          <h3>My Identity</h3>
+          <p>Manage your profile, academic stats, and privacy settings.</p>
         </div>
       </div>
 
-      {/* Widgets */}
-      <div className="widgets-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '32px' }}>
-        
-        {/* Top Instructors Discovery */}
-        <div className="widget-section">
-           <div className="section-header">
-              <h3>🏆 Top Instructors (Discovery)</h3>
-           </div>
-           <TopInstructors instructors={topInstructors} />
-           <div className="section-footer">
-              <button 
-                className="btn-premium-glass" 
-                onClick={() => navigateTo('rate')} 
-              >
-                See More Instructors →
-              </button>
-           </div>
-        </div>
-
-        {/* Top Reviewers */}
+      {/* Discovery Widgets */}
+      <div className="widgets-grid">
         <div className="widget-section">
           <div className="section-header">
-              <h3>🌟 Top Reviewers</h3>
+            <h3>Top Rated Faculty</h3>
           </div>
-          <PopularReviewers reviewers={activeReviewers.slice(0, 3)} />
-          <div className="section-footer">
-              <button 
-                className="btn-premium-glass" 
-                onClick={() => navigateTo('reviewers')} 
-              >
-                See More Reviewers →
-              </button>
-          </div>
+          <TopInstructors instructors={topInstructors} />
+          <button className="see-more-btn" onClick={() => navigateTo('rate')}>
+            Explore All Faculty →
+          </button>
         </div>
 
+        <div className="widget-section">
+          <div className="section-header">
+            <h3>Elite Contributors</h3>
+          </div>
+          <TopReviewers reviewers={activeReviewers} />
+          <button className="see-more-btn" onClick={() => navigateTo('activity')}>
+            View Global Feed →
+          </button>
+        </div>
       </div>
+
+      <style jsx>{`
+        .clickable { cursor: pointer; }
+        .ai-badge {
+          font-size: 10px;
+          font-weight: 800;
+          color: #a855f7;
+          border: 1px solid rgba(168, 85, 247, 0.3);
+          padding: 4px 12px;
+          border-radius: 50px;
+          letter-spacing: 0.1em;
+        }
+        .see-more-btn {
+          margin-top: 24px;
+          background: transparent;
+          border: 1px solid rgba(255,255,255,0.1);
+          color: #6366f1;
+          padding: 12px;
+          border-radius: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .see-more-btn:hover {
+          background: rgba(99, 102, 241, 0.1);
+          border-color: #6366f1;
+        }
+      `}</style>
     </div>
   );
 }
