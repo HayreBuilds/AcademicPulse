@@ -107,6 +107,55 @@ export default function AdminDashboard({ stats, ratings, users }) {
       }, 1500);
   };
 
+  // Handler: Premium Intelligence Report (PDF)
+  const handlePremiumReport = async () => {
+      setScanning(true);
+      
+      // 1. Map Ratings to Instructors & Infer Departments
+      const instructorStats = {};
+      const inferredDepts = {}; 
+      
+      if (ratings) {
+          ratings.forEach(r => {
+              const iid = r.instructorId || r.targetId;
+              if (!instructorStats[iid]) {
+                  instructorStats[iid] = { total: 0, count: 0, engagement: 0 };
+              }
+              const val = Number(r.rating || r.ratingValue || 0);
+              if (val > 0) {
+                  instructorStats[iid].total += val;
+                  instructorStats[iid].count += 1;
+                  instructorStats[iid].engagement += 1 + (r.replies?.length || 0) + (r.likes?.length || 0);
+                  
+                  if (!inferredDepts[iid] && (r.department || r.departmentId)) {
+                      inferredDepts[iid] = r.department || r.departmentId;
+                  }
+              }
+          });
+      }
+
+      // Generate standard executive stats
+      const reportStats = {
+          totalInstructors: stats?.totalInstructors || 0,
+          avgRating: realAvg,
+          engagementThisMonth: realEngagement, 
+          totalDepartments: stats?.totalDepartments || deptStats.length
+      };
+
+      // Transform departments for PDF
+      const reportDepts = deptStats.map(d => ({
+          name: d.name,
+          instructorCount: "N/A", // We'd need to count per dept if critical
+          rating: d.avg,
+          sentiment: d.avg >= 4 ? "Positive" : d.avg >= 3 ? "Neutral" : "Attention"
+      }));
+
+      await new Promise(r => setTimeout(r, 800)); // UI Feel
+      generateExecutiveReport(reportStats, reportDepts);
+      setScanning(false);
+      showModal("Report Exported", "The Intelligence Brief has been successfully generated and downloaded.", "alert");
+  };
+
   return (
     <div className="admin-dashboard fade-in">
       {/* 1. Header Section (Intelligence) */}
@@ -155,47 +204,6 @@ export default function AdminDashboard({ stats, ratings, users }) {
               <div className="monitor-label">Departments Monitored</div>
           </div>
       </div>
-
-      // Transform departments for PDF
-      const reportDepts = deptStats.map(d => ({
-          name: d.name,
-          instructorCount: "N/A", // We'd need to count per dept if critical
-          rating: d.avg,
-          sentiment: d.avg >= 4 ? "Positive" : d.avg >= 3 ? "Neutral" : "Attention"
-      }));
-
-      await new Promise(r => setTimeout(r, 800)); // UI Feel
-      generateExecutiveReport(reportStats, reportDepts);
-      setScanning(false);
-      showModal("Report Exported", "The Intelligence Brief has been successfully generated and downloaded.", "alert");
-  };
-
-  // Handler: Premium Intelligence Report (PDF)
-  const handlePremiumReport = async () => {
-      setScanning(true);
-      
-      // 1. Map Ratings to Instructors & Infer Departments
-      const instructorStats = {};
-      const inferredDepts = {}; 
-      
-      if (ratings) {
-          ratings.forEach(r => {
-              const iid = r.instructorId || r.targetId;
-              if (!instructorStats[iid]) {
-                  instructorStats[iid] = { total: 0, count: 0, engagement: 0 };
-              }
-              const val = Number(r.rating || r.ratingValue || 0);
-              if (val > 0) {
-                  instructorStats[iid].total += val;
-                  instructorStats[iid].count += 1;
-                  instructorStats[iid].engagement += 1 + (r.replies?.length || 0) + (r.likes?.length || 0);
-                  
-                  if (!inferredDepts[iid] && (r.department || r.departmentId)) {
-                      inferredDepts[iid] = r.department || r.departmentId;
-                  }
-              }
-          });
-      }
 
       // 2. Prepare Enriched Instructor List
       const rawInstructors = users ? users.filter(u => u.role === 'instructor' || u.instructorId) : [];
